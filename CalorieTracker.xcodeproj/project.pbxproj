@@ -14,6 +14,7 @@
 		90C1CC1328877BE5006B4009 /* Week.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C1CC1228877BE5006B4009 /* Week.swift */; };
 		90C1CC1528877D6D006B4009 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C1CC1428877D6D006B4009 /* Day.swift */; };
 		90C1CC17288793CE006B4009 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C1CC16288793CE006B4009 /* Meal.swift */; };
+		C8C073BA288F2DD2008286AA /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C073B9288F2DD2008286AA /* ProfileView.swift */; };
 		D18F2EBE288CDBAF0097B6C4 /* Homepage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18F2EBD288CDBAF0097B6C4 /* Homepage.swift */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +27,7 @@
 		90C1CC1228877BE5006B4009 /* Week.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Week.swift; sourceTree = "<group>"; };
 		90C1CC1428877D6D006B4009 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		90C1CC16288793CE006B4009 /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
+		C8C073B9288F2DD2008286AA /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		D18F2EBD288CDBAF0097B6C4 /* Homepage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Homepage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -59,8 +61,9 @@
 		90C1CC0328871E25006B4009 /* CalorieTracker */ = {
 			isa = PBXGroup;
 			children = (
-				D18F2EBD288CDBAF0097B6C4 /* Homepage.swift */,
 				90C1CC16288793CE006B4009 /* Meal.swift */,
+				D18F2EBD288CDBAF0097B6C4 /* Homepage.swift */,
+				C8C073B9288F2DD2008286AA /* ProfileView.swift */,
 				90C1CC1428877D6D006B4009 /* Day.swift */,
 				90C1CC0428871E25006B4009 /* CalorieTrackerApp.swift */,
 				90C1CC0628871E25006B4009 /* ContentView.swift */,
@@ -154,6 +157,7 @@
 				90C1CC0528871E25006B4009 /* CalorieTrackerApp.swift in Sources */,
 				D18F2EBE288CDBAF0097B6C4 /* Homepage.swift in Sources */,
 				90C1CC1528877D6D006B4009 /* Day.swift in Sources */,
+				C8C073BA288F2DD2008286AA /* ProfileView.swift in Sources */,
 				90C1CC1328877BE5006B4009 /* Week.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

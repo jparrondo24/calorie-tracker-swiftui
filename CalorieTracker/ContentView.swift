@@ -9,8 +9,27 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
+       /*
+            TabView{
+            
+            
+            Homepage()
+                .tabItem(){
+                    Image(systemName: "house")
+                    Text("Home")
+                }
+            ProfileView()
+                .tabItem(){
+                    Image(systemName: "person.crop.circle.fill")
+                    Text("Profile")
+                }
+            
+            }//end tabview
+        */
         DaysView()
+        
     }
+    
 }
 
 //return the totalDaily to the Homepage

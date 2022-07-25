@@ -8,10 +8,26 @@
 import SwiftUI
 
 struct Homepage: View {
+    
+    @State private var isActive: Bool = false
+    
     var body: some View {
         
         NavigationView {
             VStack {
+                
+                HStack{
+                    Spacer()
+                    NavigationLink(
+                        destination: ProfileView(),
+                        isActive: $isActive,
+                        label: {
+                            Text("Settings")
+                        }
+                    ).padding()
+                    //lines 21-27 creates a link
+                    //to send to Profile View
+                }//end HStack
                 VStack {
                     Text("Calories count for today")
                         .multilineTextAlignment(.center)
@@ -34,6 +50,7 @@ struct Homepage: View {
                     }
                 }
                 Spacer()
+                
             } //end of VStack
 
         } //end of View
@@ -46,3 +63,5 @@ struct Homepage_Previews: PreviewProvider {
         Homepage()
     }
 }
+
+//struct view
