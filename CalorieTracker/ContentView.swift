@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        DaysView()
+        Homepage()
     }
 }
 
@@ -25,11 +25,10 @@ struct DaysView: View {
     @State var showSheet: Bool
     let weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     
-    init() {
-        let newWeek = Week(dateInWeek: Date())
-        _week = StateObject(wrappedValue: newWeek)
-        selection = newWeek.dayOfWeek
-        currentCalorieTotal = newWeek.days[newWeek.dayOfWeek].meals.reduce(0) { $0 + $1.calorieCount }
+    init(week: Week) {
+        _week = StateObject(wrappedValue: week)
+        selection = week.dayOfWeek
+        currentCalorieTotal = week.days[week.dayOfWeek].meals.reduce(0) { $0 + $1.calorieCount }
         showSheet = false
     }
     
@@ -51,7 +50,6 @@ struct DaysView: View {
                     .font(.system(size: 18, weight: .bold))
             }
             .padding(.horizontal, 20)
-            .padding(.top, 30)
             .padding(.bottom, 3)
             
             TabView(selection: $selection) {
@@ -111,6 +109,7 @@ struct DayView: View {
                             },
                             onEditSubmit: {
                                 currentCalorieTotal = day.meals.reduce(0) { $0 + $1.calorieCount }
+                                day.calorieTotal = currentCalorieTotal
                             }
                         )
                     }
