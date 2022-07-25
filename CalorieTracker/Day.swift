@@ -36,7 +36,7 @@ class Day: Identifiable, ObservableObject {
     
     func fillMealsWithDummies() {
         meals.append(Meal(name: "Breakfast", description: "Tacos", calorieCount: 400))
-        meals.append(Meal(name: "Lunch", description: "McDonalds Qaurter Pounder", calorieCount: 700))
+        meals.append(Meal(name: "Lunch", description: "McDonalds Quarter Pounder", calorieCount: 700))
         meals.append(Meal(name: "Dinner", description: "Pan con Lechon", calorieCount: 500))
     }
 }

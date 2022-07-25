@@ -13,6 +13,11 @@ struct ContentView: View {
     }
 }
 
+//return the totalDaily to the Homepage
+/*struct totalDaily: Int {
+    return currentCalorieTotal
+}*/
+
 struct DaysView: View {
     @StateObject var week: Week
     @State var selection: Int
