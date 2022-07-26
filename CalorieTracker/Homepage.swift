@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Homepage: View {
-
+    //state variables
     @StateObject var week = Week(dateInWeek: Date())
     @State var todaysCalories = 0
     @State var calorieAverage: Double = 0
