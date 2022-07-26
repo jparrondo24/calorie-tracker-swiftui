@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import UIKit
+
 
 struct ProfileView: View {
     @State private var firstName = ""
@@ -13,6 +15,8 @@ struct ProfileView: View {
     @State private var email = ""
     @State private var birthDate = Date()
     @State private var notifications = false
+    var personProfile:Person? //type Person
+    
     var body: some View {
         NavigationView{
             Form{
@@ -30,18 +34,28 @@ struct ProfileView: View {
                      destination: URL(string: "https://health.clevelandclinic.org/how-many-calories-a-day-should-i-eat/")!) //This code will make a text contain a link. It will send you to an article I linked.
             }//end section
             }//end Form
-            .navigationTitle("Profile")
+            .navigationTitle("Profile Settings")
             .toolbar{
                 ToolbarItemGroup(placement: .navigationBarTrailing){
                     Button("Save", action: saveUser)
                         }
                     }
-            .navigationViewStyle(StackNavigationViewStyle())
+            //.navigationViewStyle(StackNavigationViewStyle())
         }//end NavView
     }//end var body
     
     func saveUser(){
-        print("User saved")
+        personProfile?.firstName = firstName
+        personProfile?.lastName = lastName
+        personProfile?.email = email
+        //idea here is to save the information of the user onto the system.
+        print()
+        print("----------------------------")
+        print("Saved Person Info")
+        print("----------------------------")
+        
+      
+       
     }
 }
 

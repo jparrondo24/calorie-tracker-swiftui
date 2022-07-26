@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 struct Homepage: View {
     //state variables
     @StateObject var week = Week(dateInWeek: Date())
@@ -47,9 +46,14 @@ struct Homepage: View {
                             Text("Settings")
                         }
                     ).padding()
+                        .padding()
+                        .edgesIgnoringSafeArea(.all)
+                        
+                
                     //lines 21-27 creates a link
                     //to send to Profile View
                 }//end HStack
+                
                 VStack {
                     Text("Calories count for today")
                     Spacer()
