@@ -185,7 +185,7 @@ struct MealView: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 5)
         .sheet(isPresented: $showSheet, onDismiss: onEditSubmit, content: {
-            //EditMealSheetView(mealToEdit: meal)
+            EditMealSheetView(mealToEdit: meal)
         })
         
     }
