@@ -11,6 +11,7 @@ struct ContentView: View {
     var body: some View {
         Homepage()
     }
+    
 }
 
 //return the totalDaily to the Homepage

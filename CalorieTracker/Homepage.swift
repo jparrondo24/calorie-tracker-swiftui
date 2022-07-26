@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
-
 struct Homepage: View {
+    //state variables
     @StateObject var week = Week(dateInWeek: Date())
     @State var todaysCalories = 0
     @State var calorieAverage: Double = 0
+   
+
     
     func calculateCalorieAverage() -> Double {
         var sum = 0
@@ -29,11 +31,26 @@ struct Homepage: View {
         
         return Double(sum) / Double(numDaysWithMeals)
     }
+
     
     var body: some View {
         
         NavigationView {
             VStack {
+                
+                HStack{
+                    Spacer()
+                    NavigationLink(
+                        destination: ProfileView()){
+                            Text("Settings")
+                                .bold()
+                                .frame(width: 70,height: 10)
+                                .offset(y: -21)
+                        }.padding()
+                      
+                        }//end HStack
+                        //lines 44-51 creates a link
+                        //to send to Profile View
                 VStack {
                     Text("Calories count for today")
                     Spacer()
@@ -68,6 +85,7 @@ struct Homepage: View {
                     }
                 }
                 Spacer()
+                
             } //end of VStack
             .onAppear(perform: {
                 todaysCalories = week.days[week.dayOfWeek].calorieTotal
@@ -83,3 +101,5 @@ struct Homepage_Previews: PreviewProvider {
         Homepage()
     }
 }
+
+//struct view
