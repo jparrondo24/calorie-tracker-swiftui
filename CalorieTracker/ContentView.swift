@@ -201,6 +201,7 @@ struct AddMealSheetView: View {
     
     var body: some View {
         MealFormView(
+            //optionButton: Use saved meal
             name: $name,
             description: $description,
             calorieCount: $calorieCount,
@@ -208,10 +209,25 @@ struct AddMealSheetView: View {
                 dayToAddTo.addMeal(meal: Meal(name: name, description: description, calorieCount: calorieCount))
                 presentationMode.wrappedValue.dismiss()
             },
+            //buttonText: Save Meal",
             buttonText: "Add Meal"
         )
+        //if Save Meal clicked
+            //mealOptions.addMeal(meal: Meal(name: name, description: description, calorieCount: calorieCount))
     }
 }
+
+
+/*struct useSavedMealView: View {
+    //Shows drop down menu of meals listed in alphabetical order
+    //once the meal is selected pop up happens
+    //Add meal? Yes or no button
+    //if yes
+        dayToAddTo.addMeal(meal: Meal(name: name, description: description, calorieCount: calorieCount))
+        //exit View
+    //else
+        //delete popup, go back to meal listing
+}*/
 
 
 struct EditMealSheetView: View {
