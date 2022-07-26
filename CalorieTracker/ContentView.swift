@@ -21,6 +21,7 @@ struct ContentView: View {
 
 struct DaysView: View {
     @StateObject var week: Week
+    @StateObject var list: List = List()
     @State var selection: Int
     @State var currentCalorieTotal: Int
     @State var showSheet: Bool
@@ -73,7 +74,8 @@ struct DaysView: View {
             currentCalorieTotal = week.days[selection].meals.reduce(0) { $0 + $1.calorieCount }
         }, content: {
             AddMealSheetView(
-                dayToAddTo: week.days[selection]
+                dayToAddTo: week.days[selection],
+                saveMeal: list
             )
         })
     }
@@ -183,7 +185,7 @@ struct MealView: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 5)
         .sheet(isPresented: $showSheet, onDismiss: onEditSubmit, content: {
-            EditMealSheetView(mealToEdit: meal)
+            //EditMealSheetView(mealToEdit: meal)
         })
         
     }
@@ -194,6 +196,7 @@ struct AddMealSheetView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @State var dayToAddTo: Day
+    @State var saveMeal: List
     
     @State private var name: String = ""
     @State private var description: String = ""
@@ -205,15 +208,18 @@ struct AddMealSheetView: View {
             name: $name,
             description: $description,
             calorieCount: $calorieCount,
-            onSubmitAttempt: {
+            onSubmitAttemptSave: {
+                //add to saved meals array
                 dayToAddTo.addMeal(meal: Meal(name: name, description: description, calorieCount: calorieCount))
                 presentationMode.wrappedValue.dismiss()
             },
-            //buttonText: Save Meal",
-            buttonText: "Add Meal"
+            onSubmitAttemptAdd: {
+                dayToAddTo.addMeal(meal: Meal(name: name, description: description, calorieCount: calorieCount))
+                presentationMode.wrappedValue.dismiss()
+            },
+            option1: "Save Meal",
+            option2: "Add Meal"
         )
-        //if Save Meal clicked
-            //mealOptions.addMeal(meal: Meal(name: name, description: description, calorieCount: calorieCount))
     }
 }
 
@@ -250,19 +256,102 @@ struct EditMealSheetView: View {
             name: $name,
             description: $description,
             calorieCount: $calorieCount,
-            onSubmitAttempt: {
+            onSubmitAttemptAdd: {
                 mealToEdit.name = name
                 mealToEdit.description = description
                 mealToEdit.calorieCount = calorieCount
                 presentationMode.wrappedValue.dismiss()
             },
-            buttonText: "Save Meal"
+            option2: "Save Meal"
         )
     }
 }
 
 
 struct MealFormView: View {
+    @Binding var name: String
+    @Binding var description: String
+    @Binding var calorieCount: Int
+    @State var onSubmitAttemptSave: (() -> Void)?
+    @State var onSubmitAttemptAdd: () -> Void
+    @State var option1: String?
+    @State var option2: String
+    
+    var body: some View {
+        VStack {
+            ScrollView {
+                VStack(spacing: 30) {
+                    VStack {
+                        HStack {
+                            Text("Name")
+                                .font(.system(size: 22, weight: .bold))
+                            Spacer()
+                        }
+                        TextField(
+                            "",
+                            text: $name
+                        )
+                        .textFieldStyle(.roundedBorder)
+                    }
+                    VStack {
+                        HStack {
+                            Text("Description")
+                                .font(.system(size: 22, weight: .bold))
+                            Spacer()
+                        }
+                        TextField(
+                            "",
+                            text: $description
+                        )
+                        .textFieldStyle(.roundedBorder)
+                    }
+                    VStack {
+                        HStack {
+                            Text("Calories")
+                                .font(.system(size: 22, weight: .bold))
+                            Spacer()
+                        }
+                        TextField(
+                            "",
+                            value: $calorieCount,
+                            format: .number
+                        )
+                        .textFieldStyle(.roundedBorder)
+                        .keyboardType(.numberPad)
+                    }
+                    
+                }
+            }
+            //.frame(maxWidth: .infinity, maxHeight: .infinity)
+            if onSubmitAttemptSave != nil {
+                Button(action: onSubmitAttemptSave ?? {}) {
+                    Text("\(option1 ?? "")")
+                        .foregroundColor(Color.white)
+                        .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.blue)
+                    .cornerRadius(12)
+                    .padding(.bottom, 30)
+                }
+            }
+            
+            Button(action: onSubmitAttemptAdd) {
+                Text("\(option2)")
+                    .foregroundColor(Color.white)
+                    .padding(.vertical, 12)
+            }
+            .frame(maxWidth: .infinity)
+            .background(Color.blue)
+            .cornerRadius(12)
+            .padding(.bottom, 30)
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 30)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+/*struct SavedMealFormView: View {
     @Binding var name: String
     @Binding var description: String
     @Binding var calorieCount: Int
@@ -315,11 +404,7 @@ struct MealFormView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            Button(action: onSubmitAttempt) {
-                Text("\(buttonText)")
-                    .foregroundColor(Color.white)
-                    .padding(.vertical, 12)
-            }
+            //deleted button that was here
             .frame(maxWidth: .infinity)
             .background(Color.blue)
             .cornerRadius(12)
@@ -329,7 +414,7 @@ struct MealFormView: View {
         .padding(.top, 30)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-}
+}*/
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
