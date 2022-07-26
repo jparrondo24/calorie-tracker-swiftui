@@ -11,7 +11,8 @@ struct Homepage: View {
     @StateObject var week = Week(dateInWeek: Date())
     @State var todaysCalories = 0
     @State var calorieAverage: Double = 0
-    @State private var isActive: Bool = false
+   
+
     
     func calculateCalorieAverage() -> Double {
         var sum = 0
@@ -40,20 +41,16 @@ struct Homepage: View {
                 HStack{
                     Spacer()
                     NavigationLink(
-                        destination: ProfileView(),
-                        isActive: $isActive,
-                        label: {
+                        destination: ProfileView()){
                             Text("Settings")
-                        }
-                    ).padding()
-                        .padding()
-                        .edgesIgnoringSafeArea(.all)
-                        
-                
-                    //lines 21-27 creates a link
-                    //to send to Profile View
-                }//end HStack
-                
+                                .bold()
+                                .frame(width: 70,height: 10)
+                                .offset(y: -21)
+                        }.padding()
+                      
+                        }//end HStack
+                        //lines 44-51 creates a link
+                        //to send to Profile View
                 VStack {
                     Text("Calories count for today")
                     Spacer()
