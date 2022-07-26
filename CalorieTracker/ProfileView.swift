@@ -15,7 +15,7 @@ struct ProfileView: View {
     @State private var email = ""
     @State private var birthDate = Date()
     @State private var notifications = false
-    var personProfile:Person? //type Person
+    @State var personProfile: Person
     
     var body: some View {
         NavigationView{
@@ -40,14 +40,24 @@ struct ProfileView: View {
                     Button("Save", action: saveUser)
                         }
                     }
+            .onAppear(perform: {
+                firstName = personProfile.firstName
+                lastName = personProfile.lastName
+                email = personProfile.email
+                birthDate = personProfile.birthDate
+                notifications = personProfile.receivesNotifications
+            })
             //.navigationViewStyle(StackNavigationViewStyle())
         }//end NavView
     }//end var body
     
     func saveUser(){
-        personProfile?.firstName = firstName
-        personProfile?.lastName = lastName
-        personProfile?.email = email
+        personProfile.firstName = firstName
+        personProfile.lastName = lastName
+        personProfile.email = email
+        personProfile.birthDate = birthDate
+        personProfile.receivesNotifications = notifications
+        
         //idea here is to save the information of the user onto the system.
         print()
         print("----------------------------")
@@ -61,6 +71,6 @@ struct ProfileView: View {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView()
+        ProfileView(personProfile: Person())
     }
 }

@@ -7,17 +7,28 @@
 
 import Foundation
 
-class Person{
+class Person: ObservableObject {
     
-    var firstName: String
-    var lastName: String
-    var email: String
+    @Published var firstName: String
+    @Published var lastName: String
+    @Published var email: String
+    @Published var birthDate: Date
+    @Published var receivesNotifications: Bool
     
+    init() {
+        firstName = ""
+        lastName = ""
+        email = ""
+        birthDate = Date()
+        receivesNotifications = false
+    }
     
-    init(firstName:String, lastName: String, email: String){
+    init(firstName:String, lastName: String, email: String, birthDate: Date, receivesNotifications: Bool){
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
+        self.birthDate = birthDate
+        self.receivesNotifications = receivesNotifications
     }//this initializer creates an object Person
     
     

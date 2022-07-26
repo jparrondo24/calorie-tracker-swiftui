@@ -9,6 +9,7 @@ import SwiftUI
 struct Homepage: View {
     //state variables
     @StateObject var week = Week(dateInWeek: Date())
+    @StateObject var person = Person()
     @State var todaysCalories = 0
     @State var calorieAverage: Double = 0
    
@@ -41,7 +42,7 @@ struct Homepage: View {
                 HStack{
                     Spacer()
                     NavigationLink(
-                        destination: ProfileView()){
+                        destination: ProfileView(personProfile: person)){
                             Text("Settings")
                                 .bold()
                                 .frame(width: 70,height: 10)
