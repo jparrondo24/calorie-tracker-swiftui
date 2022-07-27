@@ -14,11 +14,6 @@ struct ContentView: View {
     
 }
 
-//return the totalDaily to the Homepage
-/*struct totalDaily: Int {
-    return currentCalorieTotal
-}*/
-
 struct DaysView: View {
     @StateObject var week: Week
     @StateObject var list: List = List()
@@ -124,6 +119,22 @@ struct DayView: View {
     }
 }
 
+//has to show saved meals from List
+//The rows must be able to be selected
+//Must have popup with Y/N
+//Yes puts saved meal in the Day class
+//After add exit view and go back to Day/Week view
+//No gets rid of popup and goes back to the normal view
+/*struct FoodView: View {
+    @StateObject var list: List = List()
+    
+    var body: some View {
+        ForEach(list.meals) {
+            //print(meal)
+        }
+    }
+}*/
+
 struct MealView: View {
     @StateObject var meal: Meal
     @State var deleteMeal: () -> Void
@@ -204,7 +215,6 @@ struct AddMealSheetView: View {
     
     var body: some View {
         MealFormView(
-            //optionButton: Use saved meal
             name: $name,
             description: $description,
             calorieCount: $calorieCount,
@@ -217,6 +227,7 @@ struct AddMealSheetView: View {
                 dayToAddTo.addMeal(meal: Meal(name: name, description: description, calorieCount: calorieCount))
                 presentationMode.wrappedValue.dismiss()
             },
+            pullList: "Use Saved Meal",
             option1: "Save Meal",
             option2: "Add Meal"
         )
@@ -267,13 +278,15 @@ struct EditMealSheetView: View {
     }
 }
 
-
+//if useSavedItem is enabled must use struct FoodView
 struct MealFormView: View {
     @Binding var name: String
     @Binding var description: String
     @Binding var calorieCount: Int
+    @State var useSavedItem: (() -> Void)?
     @State var onSubmitAttemptSave: (() -> Void)?
     @State var onSubmitAttemptAdd: () -> Void
+    @State var pullList: String?
     @State var option1: String?
     @State var option2: String
     
@@ -281,6 +294,17 @@ struct MealFormView: View {
         VStack {
             ScrollView {
                 VStack(spacing: 30) {
+                    if useSavedItem != nil {
+                        Button(action: useSavedItem ?? {}) {
+                            Text("\(pullList ?? "")")
+                                .foregroundColor(Color.white)
+                                .padding(.vertical, 12)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .cornerRadius(12)
+                            .padding(.bottom, 30)
+                        }
+                    }
                     VStack {
                         HStack {
                             Text("Name")
@@ -350,71 +374,6 @@ struct MealFormView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
-
-/*struct SavedMealFormView: View {
-    @Binding var name: String
-    @Binding var description: String
-    @Binding var calorieCount: Int
-    @State var onSubmitAttempt: () -> Void
-    @State var buttonText: String
-    
-    var body: some View {
-        VStack {
-            ScrollView {
-                VStack(spacing: 30) {
-                    VStack {
-                        HStack {
-                            Text("Name")
-                                .font(.system(size: 22, weight: .bold))
-                            Spacer()
-                        }
-                        TextField(
-                            "",
-                            text: $name
-                        )
-                        .textFieldStyle(.roundedBorder)
-                    }
-                    VStack {
-                        HStack {
-                            Text("Description")
-                                .font(.system(size: 22, weight: .bold))
-                            Spacer()
-                        }
-                        TextField(
-                            "",
-                            text: $description
-                        )
-                        .textFieldStyle(.roundedBorder)
-                    }
-                    VStack {
-                        HStack {
-                            Text("Calories")
-                                .font(.system(size: 22, weight: .bold))
-                            Spacer()
-                        }
-                        TextField(
-                            "",
-                            value: $calorieCount,
-                            format: .number
-                        )
-                        .textFieldStyle(.roundedBorder)
-                        .keyboardType(.numberPad)
-                    }
-                    
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            //deleted button that was here
-            .frame(maxWidth: .infinity)
-            .background(Color.blue)
-            .cornerRadius(12)
-            .padding(.bottom, 30)
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 30)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-}*/
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
