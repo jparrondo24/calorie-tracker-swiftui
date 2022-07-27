@@ -70,7 +70,7 @@ struct DaysView: View {
         }, content: {
             AddMealSheetView(
                 dayToAddTo: week.days[selection],
-                saveMeal: list
+                savedMeals: list
             )
         })
     }
@@ -207,26 +207,36 @@ struct AddMealSheetView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @State var dayToAddTo: Day
-    @State var saveMeal: List
+    @State var savedMeals: List
     
     @State private var name: String = ""
     @State private var description: String = ""
     @State private var calorieCount: Int = 0
+    
+    func onPressSavedMeal(meal: Meal) {
+        dayToAddTo.addMeal(meal: meal)
+        presentationMode.wrappedValue.dismiss()
+    }
     
     var body: some View {
         MealFormView(
             name: $name,
             description: $description,
             calorieCount: $calorieCount,
+            showSavedItems: true,
             onSubmitAttemptSave: {
                 //add to saved meals array
-                dayToAddTo.addMeal(meal: Meal(name: name, description: description, calorieCount: calorieCount))
+                let meal = Meal(name: name, description: description, calorieCount: calorieCount)
+                savedMeals.addMeal(meal: meal)
+                dayToAddTo.addMeal(meal: meal)
                 presentationMode.wrappedValue.dismiss()
             },
             onSubmitAttemptAdd: {
                 dayToAddTo.addMeal(meal: Meal(name: name, description: description, calorieCount: calorieCount))
                 presentationMode.wrappedValue.dismiss()
             },
+            onPressSavedMeal: onPressSavedMeal,
+            savedMeals: savedMeals,
             pullList: "Use Saved Meal",
             option1: "Save Meal",
             option2: "Add Meal"
@@ -235,16 +245,35 @@ struct AddMealSheetView: View {
 }
 
 
-/*struct useSavedMealView: View {
+
+struct useSavedMealView: View {
+    @State var onPressSavedMeal: ((Meal) -> Void)?
+    @State var savedLists: List?
     //Shows drop down menu of meals listed in alphabetical order
     //once the meal is selected pop up happens
     //Add meal? Yes or no button
     //if yes
-        dayToAddTo.addMeal(meal: Meal(name: name, description: description, calorieCount: calorieCount))
+    var body: some View {
+        ScrollView {
+            VStack {
+                ForEach(savedLists?.meals ?? []) { meal in
+                    HStack {
+                        Text("\(meal.name)")
+                        Text("\(meal.description)")
+                        Text("\(meal.calorieCount)")
+                    }
+                    .onTapGesture(perform: {
+                        onPressSavedMeal!(meal)
+                    })
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: 200)
+    }
         //exit View
     //else
         //delete popup, go back to meal listing
-}*/
+}
 
 
 struct EditMealSheetView: View {
@@ -283,9 +312,11 @@ struct MealFormView: View {
     @Binding var name: String
     @Binding var description: String
     @Binding var calorieCount: Int
-    @State var useSavedItem: (() -> Void)?
+    @State var showSavedItems: Bool?
     @State var onSubmitAttemptSave: (() -> Void)?
     @State var onSubmitAttemptAdd: () -> Void
+    @State var onPressSavedMeal: ((Meal) -> Void)?
+    @State var savedMeals: List?
     @State var pullList: String?
     @State var option1: String?
     @State var option2: String
@@ -294,16 +325,11 @@ struct MealFormView: View {
         VStack {
             ScrollView {
                 VStack(spacing: 30) {
-                    if useSavedItem != nil {
-                        Button(action: useSavedItem ?? {}) {
-                            Text("\(pullList ?? "")")
-                                .foregroundColor(Color.white)
-                                .padding(.vertical, 12)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            .cornerRadius(12)
-                            .padding(.bottom, 30)
-                        }
+                    if showSavedItems ?? false {
+                        useSavedMealView(
+                            onPressSavedMeal: onPressSavedMeal,
+                            savedLists: savedMeals
+                        )
                     }
                     VStack {
                         HStack {
