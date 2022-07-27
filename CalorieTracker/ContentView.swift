@@ -40,7 +40,15 @@ struct DaysView: View {
                     Text("\(weekdays[selection])," + "\n" + "\(week.days[selection].dateString)")
                         .font(.system(size: 30, weight: .bold))
                         .lineLimit(2)
-                    Spacer()
+                    NavigationLink(
+                        destination: food()){
+                            Text("foods")
+                                .bold()
+                                .frame(width: 70,height: 10)
+                                
+                            
+                            
+                        }.padding()
                     Button(action: { showSheet = true }) {
                         Image(systemName: "plus")
                             .foregroundColor(Color.black)
