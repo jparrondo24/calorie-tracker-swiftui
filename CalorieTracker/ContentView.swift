@@ -14,13 +14,9 @@ struct ContentView: View {
     
 }
 
-//return the totalDaily to the Homepage
-/*struct totalDaily: Int {
-    return currentCalorieTotal
-}*/
-
 struct DaysView: View {
     @StateObject var week: Week
+    @StateObject var list: List = List()
     @State var selection: Int
     @State var currentCalorieTotal: Int
     @State var showSheet: Bool
@@ -84,7 +80,8 @@ struct DaysView: View {
             currentCalorieTotal = week.days[selection].meals.reduce(0) { $0 + $1.calorieCount }
         }, content: {
             AddMealSheetView(
-                dayToAddTo: week.days[selection]
+                dayToAddTo: week.days[selection],
+                savedMeals: list
             )
         })
     }
@@ -132,6 +129,22 @@ struct DayView: View {
         .padding(.bottom, 50)
     }
 }
+
+//has to show saved meals from List
+//The rows must be able to be selected
+//Must have popup with Y/N
+//Yes puts saved meal in the Day class
+//After add exit view and go back to Day/Week view
+//No gets rid of popup and goes back to the normal view
+/*struct FoodView: View {
+    @StateObject var list: List = List()
+    
+    var body: some View {
+        ForEach(list.meals) {
+            //print(meal)
+        }
+    }
+}*/
 
 struct MealView: View {
     @StateObject var meal: Meal
@@ -205,23 +218,72 @@ struct AddMealSheetView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @State var dayToAddTo: Day
+    @State var savedMeals: List
     
     @State private var name: String = ""
     @State private var description: String = ""
     @State private var calorieCount: Int = 0
+    
+    func onPressSavedMeal(meal: Meal) {
+        dayToAddTo.addMeal(meal: meal)
+        presentationMode.wrappedValue.dismiss()
+    }
     
     var body: some View {
         MealFormView(
             name: $name,
             description: $description,
             calorieCount: $calorieCount,
-            onSubmitAttempt: {
+            showSavedItems: true,
+            onSubmitAttemptSave: {
+                //add to saved meals array
+                let meal = Meal(name: name, description: description, calorieCount: calorieCount)
+                savedMeals.addMeal(meal: meal)
+                dayToAddTo.addMeal(meal: meal)
+                presentationMode.wrappedValue.dismiss()
+            },
+            onSubmitAttemptAdd: {
                 dayToAddTo.addMeal(meal: Meal(name: name, description: description, calorieCount: calorieCount))
                 presentationMode.wrappedValue.dismiss()
             },
-            buttonText: "Add Meal"
+            onPressSavedMeal: onPressSavedMeal,
+            savedMeals: savedMeals,
+            pullList: "Use Saved Meal",
+            option1: "Save Meal",
+            option2: "Add Meal"
         )
     }
+}
+
+
+
+struct useSavedMealView: View {
+    @State var onPressSavedMeal: ((Meal) -> Void)?
+    @State var savedLists: List?
+    //Shows drop down menu of meals listed in alphabetical order
+    //once the meal is selected pop up happens
+    //Add meal? Yes or no button
+    //if yes
+    var body: some View {
+        ScrollView {
+            VStack {
+                ForEach(savedLists?.meals ?? []) { meal in
+                    HStack {
+                        Text("\(meal.name)")
+                        Text("\(meal.description)")
+                        Text("\(meal.calorieCount)")
+                    }
+                    .onTapGesture(perform: {
+                        onPressSavedMeal!(meal)
+                    })
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: 200)
+    }
+        //exit View
+    //else
+        //delete popup, go back to meal listing
 }
 
 
@@ -245,29 +307,41 @@ struct EditMealSheetView: View {
             name: $name,
             description: $description,
             calorieCount: $calorieCount,
-            onSubmitAttempt: {
+            onSubmitAttemptAdd: {
                 mealToEdit.name = name
                 mealToEdit.description = description
                 mealToEdit.calorieCount = calorieCount
                 presentationMode.wrappedValue.dismiss()
             },
-            buttonText: "Save Meal"
+            option2: "Save Meal"
         )
     }
 }
 
-
+//if useSavedItem is enabled must use struct FoodView
 struct MealFormView: View {
     @Binding var name: String
     @Binding var description: String
     @Binding var calorieCount: Int
-    @State var onSubmitAttempt: () -> Void
-    @State var buttonText: String
+    @State var showSavedItems: Bool?
+    @State var onSubmitAttemptSave: (() -> Void)?
+    @State var onSubmitAttemptAdd: () -> Void
+    @State var onPressSavedMeal: ((Meal) -> Void)?
+    @State var savedMeals: List?
+    @State var pullList: String?
+    @State var option1: String?
+    @State var option2: String
     
     var body: some View {
         VStack {
             ScrollView {
                 VStack(spacing: 30) {
+                    if showSavedItems ?? false {
+                        useSavedMealView(
+                            onPressSavedMeal: onPressSavedMeal,
+                            savedLists: savedMeals
+                        )
+                    }
                     VStack {
                         HStack {
                             Text("Name")
@@ -309,9 +383,21 @@ struct MealFormView: View {
                     
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            Button(action: onSubmitAttempt) {
-                Text("\(buttonText)")
+            //.frame(maxWidth: .infinity, maxHeight: .infinity)
+            if onSubmitAttemptSave != nil {
+                Button(action: onSubmitAttemptSave ?? {}) {
+                    Text("\(option1 ?? "")")
+                        .foregroundColor(Color.white)
+                        .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.blue)
+                    .cornerRadius(12)
+                    .padding(.bottom, 30)
+                }
+            }
+            
+            Button(action: onSubmitAttemptAdd) {
+                Text("\(option2)")
                     .foregroundColor(Color.white)
                     .padding(.vertical, 12)
             }
